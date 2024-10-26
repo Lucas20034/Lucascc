@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartita en Forma de Sobre con Pétalos</title>
+    <style>
+        /* Estilos base */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe4e1; /* Fondo color piel */
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Contenedor de la cartita */
+        .envelope-container {
+            position: relative;
+            width: 500px; /* Aumentar ancho del sobre */
+            height: 350px; /* Aumentar alto del sobre */
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        /* Sobre cerrado */
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ffb6c1; /* Rosado */
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.7s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #880e4f;
+            font-size: 24px; /* Aumentar tamaño de la fuente del mensaje del sobre */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Triángulos del sobre */
+        .triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            cursor: pointer;
+        }
+        .top-left {
+            top: 0;
+            left: 0;
+            border-width: 0 250px 250px 0; /* Aumentar tamaño */
+            border-color: transparent #ffb6c1 transparent transparent;
+            transition: transform 0.5s;
+        }
+        .top-right {
+            top: 0;
+            right: 0;
+            border-width: 0 0 250px 250px; /* Aumentar tamaño */
+            border-color: transparent transparent #ffb6c1 transparent;
+            transition: transform 0.5s;
+        }
+
+        /* Parte interna del mensaje */
+        .message {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px; /* Aumentar el padding para más espacio interno */
+            font-size: 20px; /* Aumentar tamaño de la fuente del mensaje */
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.5s, transform 0.5s;
+            border-radius: 8px;
+            overflow-y: auto; /* Agrega barra de desplazamiento si es necesario */
+        }
+
+        /* Efecto de abrir sobre */
+        .envelope-container.open .top-left {
+            transform: translateX(-150%) rotate(-15deg);
+        }
+        .envelope-container.open .top-right {
+            transform: translateX(150%) rotate(15deg);
+        }
+        .envelope-container.open .envelope {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .envelope-container.open .message {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Pétalos animados */
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff69b4; /* Color de los pétalos */
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            animation: fall 3s infinite ease-in;
+            opacity: 0;
+        }
+
+        /* Animación de caída de los pétalos */
+        @keyframes fall {
+            0% {
+                transform: rotate(-45deg) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(-45deg) translateX(100px) translateY(400px);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .envelope-container {
+                width: 300px; /* Ajustar tamaño para pantallas pequeñas */
+                height: 220px; /* Ajustar tamaño para pantallas pequeñas */
+            }
+            .triangle {
+                border-width: 0 150px 150px 0; /* Ajustar triángulos para pantallas pequeñas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="envelope-container" id="envelope">
+        <div class="envelope">
+            <p>👆</p>
+        </div>
+        <div class="triangle top-left"></div>
+        <div class="triangle top-right"></div>
+        <div class="message">
+            <h1>Mi profesora</h1>
+            <p>
+                “Querida profesora mía, te dedico una cartita para expresarme como me haces sentir... 
+                haces sentir en mí especial cuando de ti me dedicas algo, cada palabra bonita que dices llega a mí.
+            </p>
+            <div style="text-align: center;">
+                <p>
+                    Para mí, tú eres...
+                </p>
+                <ul style="list-style-type: none; padding: 0; text-align: left;">
+                    <li>Talentosa</li>
+                    <li>Especial</li>
+                    <span> .</span>
+                    <li>Admirable</li>
+                    <li>Dulce</li>
+                    <li>Maravillosa</li>
+                    <li>Inspiradora</li>
+                    <li>Radiante</li>
+                    <li>Orgullosa</li>
+                </ul>
+            </div>
+            <p>
+                Y seguro me quedo corto. Me encanta pasar tiempo contigo, aunque sea mirando una pantalla.
+                Gracias por existir y por aguantarme jaja. ¿Te darás cuenta de la palabra oculta?
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Función para crear y lanzar pétalos al abrir la carta
+        function createPetal() {
+            const petal = document.createElement("div");
+            petal.classList.add("petal");
+            petal.style.left = `${Math.random() * window.innerWidth}px`;
+            document.body.appendChild(petal);
+
+            setTimeout(() => {
+                petal.remove();
+            }, 3000);
+        }
+
+        // Abrir la carta y lanzar los pétalos al hacer clic
+        document.getElementById("envelope").addEventListener("click", function() {
+            this.classList.toggle("open");
+            if (this.classList.contains("open")) {
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(createPetal, i * 300);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
